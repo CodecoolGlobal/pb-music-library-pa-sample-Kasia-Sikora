@@ -1,6 +1,7 @@
 from file_handling import *
 from operator import itemgetter
 
+
 def get_albums_by_genre(albums, genre):
     """
     Get albums by genre
@@ -11,12 +12,15 @@ def get_albums_by_genre(albums, genre):
     :returns: all albums of given genre
     :rtype: list
     """
-    genre_list = [line[-2] for line in albums]
-    if genre not in genre_list:
+    genre_list = [line[-2] for line in albums] # create a list of avalable genres in albums
+
+    if genre not in genre_list: # rise an error if genre not in albums 
         raise ValueError ("Wrong genre")
 
-    genre_in_list = -2
-    return sorted([line for line in albums if genre == line[genre_in_list]], key = itemgetter(-3))
+    genre_in_list = -2 # index of genre in every line in for loop under 
+
+    # list of genre albums sorted by year
+    return sorted([line for line in albums if genre == line[genre_in_list]], key = itemgetter(2)) 
 
 
 def get_longest_album(albums):
@@ -28,14 +32,17 @@ def get_longest_album(albums):
     :returns: longest album
     :rtype: list
     """
-
     max_lenght_of_album = 0
+
+    # get max lenght of albums
     for line in albums:
         s = float(line[-1].replace(":", "."))
         if s > max_lenght_of_album:
             max_lenght_of_album = s
 
     max_lenght_of_album = str(max_lenght_of_album).replace(".", ":")
+        
+    # get album with longest play time
     for line in albums: 
         if max_lenght_of_album in line:
             return line
@@ -49,39 +56,59 @@ def get_total_albums_length(albums):
     :returns: total albums' length in minutes
     :rtype: float
     """
-    max_total_time = 0
+    sum_of_time = 0
+
+    # for loot to sum play time of every album
     for line in albums:
         index = line[-1].index(":")
         minutes = int(line[-1][:index])
         seconds = int(line[-1][index+1:])
-        max_total_time += (minutes *60)+seconds
-    max_time = float('%.2f' % float(max_total_time/60))
+        sum_of_time += (minutes *60)+seconds
+    
+    # round to 2 decimals
+    total_time = float('%.2f' % float(sum_of_time/60))
 
-    return max_time
+    return total_time
    
 
 def get_genre_stats(genre):
-    genre_in_list = -2
+
+    genre_in_list = -2 # number of genre index in lines
     genre_stats = {}
+
+    # add to dictionary genre keys 
     for line in genre: 
         if line[genre_in_list] in genre_stats.keys():
             genre_stats[line[genre_in_list]] +=1
         else:
             genre_stats[line[genre_in_list]] = 1
+
     return genre_stats
+
 
 def get_last_oldest(albums):
     
     year = 2
-    min_year = min([int(line[year]) for line in albums])
+    min_year = min([int(line[year]) for line in albums]) # get minimum year in albums
 
-    return max([line for line in albums if min_year == int(line[year])])
+    last_oldest_album = [line for line in albums if min_year == int(line[year])] # create a list of oldest albums
+
+    return last_oldest_album[-1]
+
 
 def get_last_oldest_of_genre(albums, genre):
     
+    genre_list = [line[-2] for line in albums] # list of available genres in albums
+
+    if genre not in genre_list: # rise an error if genre not in genre list
+        raise ValueError ("Wrong genre")
+
     year = 2
     genre_in_list = -2
-    oldest_of_genre = (sorted([line for line in albums if genre == line[genre_in_list]], key = itemgetter(2)))
+
+    #sort albums of specific genre by oldest year
+    oldest_of_genre = sorted([line for line in albums if genre == line[genre_in_list]], key = itemgetter(2))
+
     return oldest_of_genre[0]
 
    
