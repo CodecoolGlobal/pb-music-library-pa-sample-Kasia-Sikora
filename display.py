@@ -13,7 +13,7 @@ def print_albums_list(albums_data):
 
 def print_program_menu(menu_commands):
     for option in menu_commands:
-        print(str(menu_commands.index(option)) + '----->' + option)
+        print(str(menu_commands.index(option)+1) + '----->' + option)
 
 
 def print_command_result(message):
